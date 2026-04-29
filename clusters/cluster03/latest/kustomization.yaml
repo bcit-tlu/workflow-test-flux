@@ -3,8 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
-  - ../../../latest
+# resources:
+# - ../../../latest
 
 configMapGenerator:
   - name: cluster-env-latest
@@ -13,17 +13,17 @@ configMapGenerator:
     options:
       disableNameSuffixHash: true
 
-patches:
-  # Ensure environment is available to Flux Kustomization
-  - target:
-      kind: Kustomization|ConfigMap
-    patch: |-
-      - op: replace
-        path: /metadata/namespace
-        value: flux-system
-  # Patch Flux kustomizations with environment-related fields
-  - path: flux-kustomization-patch.yaml
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
-      version: v1
+# patches:
+#   # Ensure environment is available to Flux Kustomization
+#   - target:
+#       kind: Kustomization|ConfigMap
+#     patch: |-
+#       - op: replace
+#         path: /metadata/namespace
+#         value: flux-system
+#   # Patch Flux kustomizations with environment-related fields
+#   - path: flux-kustomization-patch.yaml
+#     target:
+#       kind: Kustomization
+#       group: kustomize.toolkit.fluxcd.io
+#       version: v1
