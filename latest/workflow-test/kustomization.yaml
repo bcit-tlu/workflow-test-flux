@@ -4,7 +4,7 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - vault-static-secrets.yaml
+  # - vault-static-secrets.yaml
 
 namespace: workflow-test
 

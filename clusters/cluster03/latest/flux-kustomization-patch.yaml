@@ -1,6 +1,3 @@
-- op: add
-  path: /spec/components
-  value: [./components/cluster-env-latest]
 - op: replace
   path: /spec/path
   value: ./latest

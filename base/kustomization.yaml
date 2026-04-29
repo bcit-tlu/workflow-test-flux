@@ -7,7 +7,7 @@ resources:
   # - image-auto-update.yaml
   - namespace.yaml
   - oci-repository.yaml
-  - vault-auth.yaml
+  # - vault-auth.yaml
 
 # Teach kustomize how to update generated names
 configurations:

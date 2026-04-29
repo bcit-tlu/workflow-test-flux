@@ -6,11 +6,5 @@ resources:
   - ./workflow-test
 
 patches:
-  # Patch Flux kustomizations with environment-related fields
-  - path: flux-kustomization-patch.yaml
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
-      version: v1
   # Patch oci resources to use rc images
   - path: oci-repository-patch.yaml
