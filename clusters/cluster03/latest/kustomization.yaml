@@ -9,6 +9,7 @@ resources:
 
 configMapGenerator:
   - name: cluster-env
+    namespace: flux-system
     literals:
       - CLUSTER_ENV=latest
 
@@ -19,6 +20,9 @@ patches:
       - op: replace
         path: /spec/path
         value: ./latest
+      - op: replace
+        path: /metadata/namespace
+        value: flux-system
 
 # patches:
 #   - target:

@@ -1,0 +1,11 @@
+---
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: default
+servers: 1
+agents: 0
+kubeAPI:
+  hostIP: 0.0.0.0
+  hostPort: "6443"
+image: rancher/k3s:v1.35.4-k3s1
