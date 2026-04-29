@@ -8,6 +8,7 @@ kind: Kustomization
 
 configMapGenerator:
   - name: cluster-env-latest
+    namespace: flux-system
     literals:
       - CLUSTER_ENV=latest
     options:
