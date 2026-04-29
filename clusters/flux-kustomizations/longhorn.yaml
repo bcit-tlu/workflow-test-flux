@@ -1,0 +1,51 @@
+# Flux Kustomizations for Longhorn distributed block storage.
+#
+# Two-stage deployment:
+#   1. Controller — installs the Longhorn Helm chart, Vault auth, and Azure Blob
+#                   backup credentials (VaultStaticSecret).
+#   2. Config     — applies StorageClasses and any post-install tuning.
+#
+# The controller stage depends on VSO config so that VaultAuth and
+# VaultStaticSecret CRDs are available when Longhorn is installed.
+# The backup target path uses postBuild variable substitution to resolve
+# per-environment values (e.g. CLUSTER_ENV) from cluster-vars.
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: longhorn
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/longhorn/controller
+  prune: true
+  wait: true
+  dependsOn:
+    - name: vault-secrets-operator-config
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-vars
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: longhorn-config
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/longhorn/config
+  prune: true
+  wait: true
+  dependsOn:
+    - name: longhorn

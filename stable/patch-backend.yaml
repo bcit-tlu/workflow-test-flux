@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: workflow-test
+  namespace: hriv
+spec:
+  values:
+    image:
+      tag: 0.0.0 # {"$imagepolicy": "hriv:workflow-test-stable:tag"}
+    replicaCount: 2
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 10Gi
+      accessModes:
+        - ReadWriteMany
+    zoneAntiAffinity:
+      enabled: true
+      topologyKey: topology.kubernetes.io/zone

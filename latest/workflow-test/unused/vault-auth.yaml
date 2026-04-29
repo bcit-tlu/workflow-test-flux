@@ -1,0 +1,24 @@
+# Service account for Vault authentication
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hriv
+  namespace: hriv
+---
+# Vault secrets operator VaultAuth configuration
+# The role must match the Kubernetes auth role defined in bcit-tlu/vault
+# (see modules/kubernetes-auth — role_name = app name from config.auto.tfvars).
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: vault-auth
+  namespace: hriv
+spec:
+  kubernetes:
+    serviceAccount: hriv
+    role: hriv
+  vaultAuthGlobalRef:
+    name: vault-auth-global
+    allowDefault: true
+    namespace: vault-secrets-operator-system

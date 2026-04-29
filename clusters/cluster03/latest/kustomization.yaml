@@ -1,0 +1,30 @@
+# cluster03 — latest (staging)
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../latest
+  # - ../../../infrastructure
+
+configMapGenerator:
+  - name: cluster-env
+    literals:
+      - CLUSTER_ENV=latest
+
+patches:
+  - target:
+      kind: Kustomization
+    patch: |-
+      - op: replace
+        path: /spec/path
+        value: ./latest
+
+# patches:
+#   - target:
+#       kind: Kustomization
+#     patch: |-
+#       - op: add
+#         path: /spec/components
+#         value:
+#           - ../components/env-latest

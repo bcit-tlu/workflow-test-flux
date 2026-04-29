@@ -1,0 +1,21 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ${RELEASE_NAME}
+spec:
+  values:
+    oidc:
+      redirectUri: https://hriv.latest.ltc.bcit.ca/api/auth/oidc/callback
+      postLoginRedirect: https://hriv.latest.ltc.bcit.ca
+      corsOrigins: https://hriv.latest.ltc.bcit.ca
+    otel:
+      enabled: true
+      serviceName: workflow-test
+      tracesExporter: otlp
+      metricsExporter: otlp
+      logsExporter: otlp
+      exporterEndpoint: http://opentelemetry-collector.observability.svc.cluster.local:4318
+      exporterProtocol: http/protobuf
+    vault:
+      enabled: true

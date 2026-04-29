@@ -1,0 +1,30 @@
+# Shared Flux Kustomization CRs — infrastructure and applications
+#
+# All cluster env folders include this base. Individual clusters exclude
+# resources they don't need via $patch: delete in their env kustomization.
+#
+# Dependency chain (enforced via dependsOn):
+#
+#   flux-system
+#     └─→ VSO controller → VSO config ─┬─→ Longhorn → Longhorn config
+#                                       │
+#                  CNPG controller ─────┼─→ CNPG config
+#                                       │
+#                                       ├─→ HRIV (also needs CNPG config)
+#                                       ├─→ HAProxy Operator
+#                                       └─→ tech-ops-docs
+#
+#   OpenTelemetry Collector runs independently (no dependsOn).
+#
+# Per-environment variables (e.g. CLUSTER_ENV) are resolved via
+# postBuild.substituteFrom using the cluster-vars ConfigMap.
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # ── Infrastructure ─────────────────────────────────────────────────────────
+  - vault-secrets-operator.yaml
+  - opentelemetry-collector.yaml
+  - longhorn.yaml
+  - cloudnative-pg.yaml

@@ -1,0 +1,50 @@
+# Flux Kustomizations for CloudNativePG.
+#
+# Two-stage deployment:
+#   1. Controller — installs the CNPG operator Helm chart (CRDs + controller).
+#   2. Config     — creates the pg-core Cluster, VaultAuth for shared DB
+#                   credentials, and per-app Database resources.
+#
+# The config stage depends on both the CNPG controller (Cluster CRD must
+# exist) and VSO config (VaultStaticSecret CRD + VaultAuthGlobal must be
+# available for the shared DB credential sync).
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cloudnative-pg
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/cloudnative-pg/controller
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cloudnative-pg-config
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/cloudnative-pg/config
+  prune: true
+  wait: true
+  dependsOn:
+    - name: vault-secrets-operator-config
+    - name: cloudnative-pg
+    - name: longhorn-config
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-vars

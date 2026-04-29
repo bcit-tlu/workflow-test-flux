@@ -1,0 +1,50 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: ${RELEASE_NAME}
+spec:
+  image: ghcr.io/bcit-tlu/${RELEASE_NAME}
+  interval: 5m
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: image-policy
+spec:
+  imageRepositoryRef:
+    name: ${RELEASE_NAME}
+    filterTags:
+      pattern: '^(?P<version>\d+\.\d+\.\d+)$'
+      extract: "$version"
+    policy:
+      semver:
+        range: ">=0.0.0"
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageUpdateAutomation
+metadata:
+  name: ${RELEASE_NAME}
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        name: fluxcdbot
+        email: fluxcdbot@users.noreply.github.com
+      messageTemplate: |
+        Automated image tag update
+
+        Automation:
+        {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}
+    push:
+      branch: main
+  update:
+    # path: ./apps/hriv/latest
+    strategy: Setters

@@ -1,0 +1,22 @@
+# Deploys chart releases
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ${RELEASE_NAME}
+spec:
+  interval: 48h
+  releaseName: ${RELEASE_NAME}
+  chartRef:
+    kind: OCIRepository
+    name: ${RELEASE_NAME}
+  # driftDetection:
+  #   mode: enabled
+  # install:
+  #   remediation:
+  #     retries: 3
+  # upgrade:
+  #   cleanupOnFail: true
+  #   remediation:
+  #     remediateLastFailure: true
+  #     retries: 3

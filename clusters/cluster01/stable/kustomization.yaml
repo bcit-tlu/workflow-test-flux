@@ -1,0 +1,21 @@
+# cluster01 — stable (production)
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base            # infrastructure Flux Kustomization CRs
+  - cluster-vars.yaml     # CLUSTER_ENV ConfigMap
+  - ../../../apps/stable  # app Flux Kustomization CRs (stable paths)
+
+patches:
+  # HAProxy Operator not yet deployed to stable
+  - target:
+      kind: Kustomization
+      name: haproxy-operator
+    patch: |-
+      $patch: delete
+      apiVersion: kustomize.toolkit.fluxcd.io/v1
+      kind: Kustomization
+      metadata:
+        name: haproxy-operator
