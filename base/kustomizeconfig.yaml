@@ -1,0 +1,7 @@
+# This file is for teaching kustomize how to substitute names
+---
+# Add the namespace to the HelmRelease chartRef
+namespace:
+  - kind: HelmRelease
+    path: spec/chartRef/namespace
+    create: true

@@ -7,12 +7,11 @@ resources:
 
 patches:
   # Patch oci resources to use rc images
-  - path: oci-patch.yaml
-  # - target:
-  #     kind: OCIRepository
-  #   patch: |-
-  #     - op: add
-  #       path: /spec/ref
-  #       value:
-  #         semver: ">=0.0.0"
-  #         semverFilter: ".*-rc.*"
+  - path: oci-repository-patch.yaml
+
+  # Patch Flux kustomizations with environment-related fields
+  - target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
+      version: v1
+    path: flux-kustomization-patch.yaml

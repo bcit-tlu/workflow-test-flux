@@ -1,4 +1,4 @@
-# Watches `oci/{chartName}` registries for new versions
+# Watches `charts/{chartName}` registries for new versions
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository

@@ -1,0 +1,12 @@
+# Apply environment-specific replacements
+# - https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/replacements/
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: cluster-env-latest
+    literals:
+      - CLUSTER_ENV=latest
+    options:
+      disableNameSuffixHash: true

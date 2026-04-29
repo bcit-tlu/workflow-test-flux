@@ -4,6 +4,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - vault-static-secrets.yaml
 
 namespace: workflow-test
 
@@ -11,18 +12,14 @@ configMapGenerator:
   - name: release-name
     literals:
       - RELEASE_NAME=workflow-test
+    options:
+      disableNameSuffixHash: true
 
 patches:
   - path: helm-values-patch.yaml
-  # - target:
-  #     kind: OCIRepository
-  #   patch: |-
-  #     - op: replace
-  #       path: /spec/url
-  #       value: oci://ghcr.io/bcit-tlu/charts/workflow-test
-  # - target:
-  #     kind: Kustomization
-  #   patch: |-
-  #     - op: replace
-  #       path: /spec/path
-  #       value: latest
+
+components:
+  # Update resources based on release name (ConfigMap above)
+  # - ../../components/release-name-replacer
+  # Create environment ConfigMap for path replacement
+  - ../../components/cluster-env-latest

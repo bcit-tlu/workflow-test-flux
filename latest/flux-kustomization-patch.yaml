@@ -1,0 +1,9 @@
+- op: add
+  path: /spec/components
+  value: [./components/cluster-env-latest]
+- op: replace
+  path: /spec/path
+  value: ./latest
+- op: replace
+  path: /spec/postBuild/substituteFrom/0/name
+  value: cluster-env-latest

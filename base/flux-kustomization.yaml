@@ -1,4 +1,4 @@
-# Flux Kustomization for HRIV — high-resolution image viewer (latest).
+# Flux Kustomization Custom Resource Definition
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -21,3 +21,5 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: cluster-env
+      - kind: ConfigMap
+        name: release-name
