@@ -14,8 +14,8 @@ spec:
   path: ./cluster-env
   prune: true
   wait: true
-  # dependsOn:
-  #   - name: vault-secrets-operator-config
+  dependsOn:
+    - name: flux-system
   #   - name: cloudnative-pg-config
   postBuild:
     substituteFrom:
