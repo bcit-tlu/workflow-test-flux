@@ -1,7 +1,23 @@
-# cluster03 — latest (staging)
+# Latest (staging)
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
   - ../../../latest
+
+configMapGenerator:
+  - name: cluster-env-latest
+    literals:
+      - CLUSTER_ENV=latest
+    options:
+      disableNameSuffixHash: true
+
+patches:
+  # Ensure environment is available to Flux Kustomization
+  - target:
+      kind: Kustomization|ConfigMap
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: flux-system

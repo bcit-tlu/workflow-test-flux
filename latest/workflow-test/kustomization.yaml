@@ -9,7 +9,7 @@ resources:
 namespace: workflow-test
 
 configMapGenerator:
-  - name: release-name
+  - name: workflow-test
     literals:
       - RELEASE_NAME=workflow-test
     options:
@@ -17,9 +17,3 @@ configMapGenerator:
 
 patches:
   - path: helm-values-patch.yaml
-
-components:
-  # Update resources based on release name (ConfigMap above)
-  # - ../../components/release-name-replacer
-  # Create environment ConfigMap for path replacement
-  - ../../components/cluster-env-latest
