@@ -4,7 +4,3 @@ kind: Kustomization
 
 resources:
   - ./workflow-test
-
-patches:
-  # Patch oci resources to use rc images
-  - path: oci-repository-patch.yaml

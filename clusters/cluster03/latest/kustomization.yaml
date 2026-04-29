@@ -3,28 +3,47 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# resources:
-# - ../../../latest
+resources:
+  - cluster-vars.yaml
+  - ../../../apps
 
-configMapGenerator:
-  - name: cluster-env-latest
-    namespace: flux-system
-    literals:
-      - CLUSTER_ENV=latest
-    options:
-      disableNameSuffixHash: true
+# configMapGenerator:
+#   - name: cluster-env-latest
+#     namespace: flux-system
+#     literals:
+#       - CLUSTER_ENV=latest
+#     options:
+#       disableNameSuffixHash: true
 
 # patches:
 #   # Ensure environment is available to Flux Kustomization
 #   - target:
-#       kind: Kustomization|ConfigMap
+#       kind: Kustomization
 #     patch: |-
 #       - op: replace
-#         path: /metadata/namespace
-#         value: flux-system
+#         path: /spec/path
+#         value: ./latest
+
 #   # Patch Flux kustomizations with environment-related fields
 #   - path: flux-kustomization-patch.yaml
 #     target:
 #       kind: Kustomization
 #       group: kustomize.toolkit.fluxcd.io
 #       version: v1
+
+# patches:
+#   # Patch oci resources to use rc images
+#   - path: oci-repository-patch.yaml
+
+replacements:
+  - sourceValue: "latest"
+    targets:
+      # Add the environment to Vault default auth
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - spec.path
+        options:
+          delimiter: "/"
+          index: 3

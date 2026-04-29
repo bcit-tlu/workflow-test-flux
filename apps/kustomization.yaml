@@ -1,0 +1,7 @@
+# Shared Flux Kustomization CRs applications
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - workflow-test.yaml
