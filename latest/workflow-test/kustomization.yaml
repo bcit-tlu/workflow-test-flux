@@ -9,7 +9,7 @@ resources:
 namespace: workflow-test
 
 configMapGenerator:
-  - name: workflow-test
+  - name: release-name
     literals:
       - RELEASE_NAME=workflow-test
     options:
